@@ -54,8 +54,6 @@ app.layout = html.Div([
         html.Div([""], style = {'width':'5%'}),
         html.Div([
             html.Br(),
-            html.Br(),
-            html.Br(),
             html.Br(), 
             dcc.Loading(id = 'pic-loading',
                         children = html.Div(["testing"], id = 'video-output'),
@@ -109,7 +107,10 @@ def video_display(n_clciks, list_of_contents, list_of_names, list_of_dates):
     changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
     if ('video-start-button' in  changed_id) and list_of_contents is not None:
         time.sleep(5)
-        data = list_of_contents.replace('data:image/jpeg;base64,', '')
+        if list_of_names[-3:] == 'png':
+            data = list_of_contents.replace('data:image/png;base64,', '')
+        elif list_of_names[-3:] == 'jpg':
+            data = list_of_contents.replace('data:image/jpeg;base64,', '')
         img = Image.open(io.BytesIO(base64.b64decode(data)))
         im = np.array(img)
         RGB_im = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
